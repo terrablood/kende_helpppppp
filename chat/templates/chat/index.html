@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'chat/css/foldal.css' %}">
+    <title>catan</title>
+</head>
+<body>
+    <div id="egyik_palya" class="container"> 
+        <h1>catan</h1>
+    </div>
+    <div id="egyik_palya" class="container2"> 
+        {% if request.user.is_authenticated %}
+            <p><a href="ujjatek/">Új játék indítása</a></p>
+            <p><a href="lobby/">Belépés a játékba</a></p>
+            <form action="{% url 'logout' %}" method="POST">
+            {% csrf_token %}
+                <button type="submit">Kijelentkezés</button>
+                </form>   
+            {% else %}
+            <p><a href="/regisztracio/">Regisztráció</a></p>
+            <p><a href="/accounts/login/">Belépés</a></p>
+        {% endif %}
+    </div>
+    <h2>alapok:<h2>
+    <p>
+        A játék lényege, hogy elérd a 100fős lakosságot. 
+        A falvak(5), városok(10) és a főváros(25) ad lakosságot, valamint mindegyiknak van 
+        egy territóriuma ahonnan nyersanyagokat kaphatsz dobásonként. 
+        A sötétzőld fa, a világos zöld széna, a zöldeskék szövet, a fehéres kő. 
+        Ezenfelűl van fém amit titkos lelőhelyekből lehet szerezni, ezeket expedícióval 
+        lehet megtalálni és bányával kitermelni.
+
+    <p>
+    
+</body>
+</html>
