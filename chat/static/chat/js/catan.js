@@ -94,24 +94,38 @@ function matrixhajtogatas(biom, lelohely, kockaszam, claim, foglalt)
     return map;
 }
 function divek_letrehozasa(x,y){
-    let terkep = aktualis_terkep();
-    let container = document.querySelector(".container");
+
+    let container = (ki_vagy_te === 'egyik')
+        ? document.getElementById("egyik_palya")
+        : document.getElementById("masik_palya");
+
+    console.log("ki_vagy_te:", ki_vagy_te);
+    console.log("container:", container);
+
     for (let i = 0; i < x; i++) {
         for (let j = 0; j < y; j++) {
             let div = document.createElement("div");
-            div.id = `${palya===egyik_palya ? 'egyik':'masik'}_${i}_${j}`;
-            div.onclick = fovaros;//ut,falu,varos,fovaros,ellenorzo_balkatt,expedicio
-            terkep.appendChild(div);
+            div.id = `${ki_vagy_te}_${i}_${j}`;
+            div.onclick = fovaros;
+            container.appendChild(div);
         }
     }
 }
-function divek_szinezese(){
-    let terkep = aktualis_terkep();
+function divek_szinezese(terkep){
+    let prefix = ki_vagy_te;
+
     for (let y = 0; y < 24; y++) {
         for (let x = 0; x < 24; x++) {
 
-            let div = document.getElementById(`${x}_${y}`);
+            let div = document.getElementById(`${prefix}_${x}_${y}`);
+            if (!div) {
+                console.warn("Hiányzó div:", `${prefix}_${x}_${y}`);
+                continue;
+            }
+
             let biom = terkep[y][x][0];
+
+            div.className = ""; // reset
 
             if (biom === 0) div.classList.add('mezo');
             if (biom === 1) div.classList.add('erdo');
@@ -164,14 +178,12 @@ function claimkiírás(claimlista)
     }
 }
 // ezek csak segédek -->> ezek müködnek
-function melyikez(div){ // megszerzi egy div koordinátáit (pozícióját a mapon)
-    console.log(div.id)
-    let [sx,sy] = div.id.split("_"); // x és y
-    
-    return [parseInt(sx), parseInt(sy)];
+function melyikez(div){
+    let [, x, y] = div.id.split("_");
+    return [parseInt(y), parseInt(x)];
 }
-function ezadiv(x,y){ // koordináta (pozíció) alapján megkeres egy divet
-    return document.getElementById(`${x} ${y}`);
+function ezadiv(x,y){
+    return document.getElementById(`${ki_vagy_te}_${x}_${y}`);
 }
 function ellenorzo_balkatt(e){
     let vizsgalt = e.target; 
@@ -529,12 +541,14 @@ function fovaros(e)
         e.target.innerHTML='FV';
         nyersanyaglista[5] += 25;
         for (let y = 0; y < 24; y++) {
-        for (let x = 0; x < 24; x++) {
+            for (let x = 0; x < 24; x++) {
 
-            let div = document.getElementById(`${x}_${y}`);
-            div.onclick = ut;
+                let div = document.getElementById(`${ki_vagy_te}_${x}_${y}`);
+                if (div) {
+                    div.onclick = ut;
+                }
+            }
         }
-    }
     }
 }
 function foglalte(x,y)
@@ -717,26 +731,23 @@ function kapcsolodike(x,y)
 // az onclick switch!
 function onclickswitch(ffff)
 {
-    if(fovaroscount == 0)
-    {
-        alert("még nem tetted le a fővárosod, nem válthatsz");
-    }
-    else
-    {
-        for (let y = 0; y < 24; y++) {
-            for (let x = 0; x < 24; x++) {
-                let div = document.getElementById(`${x}_${y}`);
+    for (let y = 0; y < 24; y++) {
+        for (let x = 0; x < 24; x++) {
+            let div = document.getElementById(`${ki_vagy_te}_${x}_${y}`);
+            if (div) {              // ⬅⬅⬅ EZ KELL
                 div.onclick = ffff;
             }
-        }   
-    } 
-    
+        }
+    }
 }
 function semmi()
 {
     alert("nyertél");
 }
 function aktualis_terkep() {
+    return ki_vagy_te == 'masik' ? terkep_masik : terkep_egyik;
+}
+function aktualis_claimlist() {
     return ki_vagy_te == 'masik' ? terkep_masik : terkep_egyik;
 }
 // végső generálás függvényei
@@ -752,7 +763,9 @@ async function init()
     jatekos_szotar = await melyik_jatekos_vagyok();
     ki_vagy_te = jatekos_szotar['melyik'];
     username = jatekos_szotar['username'];
-    
+
+    console.log("Játékos betöltve:", ki_vagy_te, username);
+
     if (ki_vagy_te=='masik'){
         valtozok_kuldese({
             'message': `${username} belépett a játékba, tehát indul a játék`,
@@ -764,20 +777,29 @@ async function init()
             'jatek_allapot_update': MOST_MEGY,
         });
     }
+
+    // ⬇⬇⬇ IDE KERÜL A UI ⬇⬇⬇
+    interfesz_generalasa();
 }
+/*
 async function interfesz_generalasa()
 {
     console.log(`divek létrehozása a(z) ${username} játékos részére, aki a(z) "${ki_vagy_te}".`);
-    divek_letrehozasa(username, egyik_palya, 24, 24);
-    divek_szinezese();
+    divek_letrehozasa(24, 24);
+    divek_szinezese(aktualis_terkep());
     if (ki_vagy_te == 'masik') {
-        divek_letrehozasa(username, masik_palya, 24, 24);   
-        divek_szinezese();
+        divek_letrehozasa(24, 24);   
+        divek_szinezese(aktualis_terkep());
     }
+}*/
+async function interfesz_generalasa()
+{
+    console.log(`divek létrehozása a(z) ${username} játékos részére, aki a(z) "${ki_vagy_te}".`);
+    divek_letrehozasa(24, 24);
+    divek_szinezese(aktualis_terkep());
 }
 
-init();
-interfesz_generalasa();
+window.onload = init;
 //divek_letrehozasa(24,24);
 //let map = randommapgen();
 //divek_szinezese(map);

@@ -14,7 +14,7 @@ async function getch(url){
  * @returns {Promise<Object>} játékos címkéje
  */
 async function melyik_jatekos_vagyok(){
-    let szotar = await getch(`${window.location.origin}/yoursweeper/api/get/melyik/jatekid/${get_jatekid()}/`);
+    let szotar = await getch(`${window.location.origin}/catan/api/get/melyik/jatekid/${get_jatekid()}/`);
     console.log("Melyik játékos vagyok?\n Szerver válasza:");
     console.log(szotar);
     return szotar;
