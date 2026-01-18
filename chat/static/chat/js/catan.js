@@ -155,12 +155,12 @@ function claimlist()
     let claims = [];
     return claims;
 }
-function claimadd(claimlista,x,y)
+function claimadd(claimlista, x, y)
 {
     let terkep = aktualis_terkep();
-    let chunk = [x,y];
+    let chunk = [y, x];   // ⬅⬅⬅ FORDÍTVA
     claimlista.push(chunk);
-    terkep[y][x][3] = 1
+    terkep[y][x][3] = 1;
 }
 function claimkiírás(claimlista)
 {
@@ -289,8 +289,7 @@ function resourcelist()
 }
 function nyersanyagosztas(dobott)
 {
-    let terkep = aktualis_terkep();
-    let alap = dobaskereses(claimlista,terkep,dobott);
+    let alap = dobaskereses(claimlista,dobott);
     for (const elem of alap) 
     {
         melyik_nyersanyag_add(elem[2],nyersanyaglista);
@@ -324,7 +323,7 @@ function ut(e)
            let s = kapcsolodike(x,y);
             if(s == 1)
             {
-                claimadd(claimlista,x,y,terkep)
+                claimadd(aktualis_claimlist(),x,y,terkep)
                 terkep[y][x][4] = 1;
                 e.target.innerHTML='U';
                 nyersanyaglista[1] -= 1;
@@ -377,15 +376,15 @@ function falu(e)
                 let s = kapcsolodike(x,y);
                 if(s == 1)
                 {
-                    claimadd(claimlista,x-1,y-1,terkep)//1
-                    claimadd(claimlista,x,y-1,terkep)//2
-                    claimadd(claimlista,x+1,y-1,terkep)//3
-                    claimadd(claimlista,x-1,y,terkep)//4
-                    claimadd(claimlista,x,y,terkep)//5
-                    claimadd(claimlista,x+1,y,terkep)//6
-                    claimadd(claimlista,x-1,y+1,terkep)//7
-                    claimadd(claimlista,x,y+1,terkep)//8
-                    claimadd(claimlista,x+1,y+1,terkep)//9
+                    claimadd(aktualis_claimlist(),x-1,y-1,terkep)//1
+                    claimadd(aktualis_claimlist(),x,y-1,terkep)//2
+                    claimadd(aktualis_claimlist(),x+1,y-1,terkep)//3
+                    claimadd(aktualis_claimlist(),x-1,y,terkep)//4
+                    claimadd(aktualis_claimlist(),x,y,terkep)//5
+                    claimadd(aktualis_claimlist(),x+1,y,terkep)//6
+                    claimadd(aktualis_claimlist(),x-1,y+1,terkep)//7
+                    claimadd(aktualis_claimlist(),x,y+1,terkep)//8
+                    claimadd(aktualis_claimlist(),x+1,y+1,terkep)//9
                     terkep[y][x][4] = 1;
                     e.target.innerHTML='F';
                     nyersanyaglista[5] += 5;
@@ -452,15 +451,15 @@ function varos(e)
             let s = kapcsolodike(x,y);
             if(s == 1)
             {
-                claimadd(claimlista,x-1,y-1,terkep)//1
-                claimadd(claimlista,x,y-1,terkep)//2
-                claimadd(claimlista,x+1,y-1,terkep)//3
-                claimadd(claimlista,x-1,y,terkep)//4
-                claimadd(claimlista,x,y,terkep)//5
-                claimadd(claimlista,x+1,y,terkep)//6
-                claimadd(claimlista,x-1,y+1,terkep)//7
-                claimadd(claimlista,x,y+1,terkep)//8
-                claimadd(claimlista,x+1,y+1,terkep)//9
+                claimadd(aktualis_claimlist(),x-1,y-1,terkep)//1
+                claimadd(aktualis_claimlist(),x,y-1,terkep)//2
+                claimadd(aktualis_claimlist(),x+1,y-1,terkep)//3
+                claimadd(aktualis_claimlist(),x-1,y,terkep)//4
+                claimadd(aktualis_claimlist(),x,y,terkep)//5
+                claimadd(aktualis_claimlist(),x+1,y,terkep)//6
+                claimadd(aktualis_claimlist(),x-1,y+1,terkep)//7
+                claimadd(aktualis_claimlist(),x,y+1,terkep)//8
+                claimadd(aktualis_claimlist(),x+1,y+1,terkep)//9
                 terkep[y][x][4] = 1;
                 e.target.innerHTML='V';
                 nyersanyaglista[5] += 10;
@@ -497,6 +496,7 @@ function varos(e)
 function fovaros(e)
 {
     let terkep = aktualis_terkep();
+    claimlista = aktualis_claimlist();
     let vizsgalt = e.target; 
     let [y, x] = melyikez(vizsgalt)
     console.log(x); 
@@ -508,35 +508,35 @@ function fovaros(e)
     }
     else
     {
-        claimadd(claimlista,x-2,y-2,terkep)//1
-        claimadd(claimlista,x-1,y-2,terkep)//2
-        claimadd(claimlista,x,y-2,terkep)//3
-        claimadd(claimlista,x+1,y-2,terkep)//4
-        claimadd(claimlista,x+2,y-2,terkep)//5
+        claimadd(aktualis_claimlist(),x-2,y-2,terkep)//1
+        claimadd(aktualis_claimlist(),x-1,y-2,terkep)//2
+        claimadd(aktualis_claimlist(),x,y-2,terkep)//3
+        claimadd(aktualis_claimlist(),x+1,y-2,terkep)//4
+        claimadd(aktualis_claimlist(),x+2,y-2,terkep)//5
 
-        claimadd(claimlista,x-2,y-1,terkep)//1
-        claimadd(claimlista,x-1,y-1,terkep)//2
-        claimadd(claimlista,x,y-1,terkep)//3
-        claimadd(claimlista,x+1,y-1,terkep)//4
-        claimadd(claimlista,x+2,y-1,terkep)//5
+        claimadd(aktualis_claimlist(),x-2,y-1,terkep)//1
+        claimadd(aktualis_claimlist(),x-1,y-1,terkep)//2
+        claimadd(aktualis_claimlist(),x,y-1,terkep)//3
+        claimadd(aktualis_claimlist(),x+1,y-1,terkep)//4
+        claimadd(aktualis_claimlist(),x+2,y-1,terkep)//5
 
-        claimadd(claimlista,x-2,y,terkep)//1
-        claimadd(claimlista,x-1,y,terkep)//2
-        claimadd(claimlista,x,y,terkep)//3
-        claimadd(claimlista,x+1,y,terkep)//4
-        claimadd(claimlista,x+2,y,terkep)//5
+        claimadd(aktualis_claimlist(),x-2,y,terkep)//1
+        claimadd(aktualis_claimlist(),x-1,y,terkep)//2
+        claimadd(aktualis_claimlist(),x,y,terkep)//3
+        claimadd(aktualis_claimlist(),x+1,y,terkep)//4
+        claimadd(aktualis_claimlist(),x+2,y,terkep)//5
 
-        claimadd(claimlista,x-2,y+1,terkep)//1
-        claimadd(claimlista,x-1,y+1,terkep)//2
-        claimadd(claimlista,x,y+1,terkep)//3
-        claimadd(claimlista,x+1,y+1,terkep)//4
-        claimadd(claimlista,x+2,y+1,terkep)//5
+        claimadd(aktualis_claimlist(),x-2,y+1,terkep)//1
+        claimadd(aktualis_claimlist(),x-1,y+1,terkep)//2
+        claimadd(aktualis_claimlist(),x,y+1,terkep)//3
+        claimadd(aktualis_claimlist(),x+1,y+1,terkep)//4
+        claimadd(aktualis_claimlist(),x+2,y+1,terkep)//5
 
-        claimadd(claimlista,x-2,y+2,terkep)//1
-        claimadd(claimlista,x-1,y+2,terkep)//2
-        claimadd(claimlista,x,y+2,terkep)//3
-        claimadd(claimlista,x+1,y+2,terkep)//4
-        claimadd(claimlista,x+2,y+2,terkep)//5
+        claimadd(aktualis_claimlist(),x-2,y+2,terkep)//1
+        claimadd(aktualis_claimlist(),x-1,y+2,terkep)//2
+        claimadd(aktualis_claimlist(),x,y+2,terkep)//3
+        claimadd(aktualis_claimlist(),x+1,y+2,terkep)//4
+        claimadd(aktualis_claimlist(),x+2,y+2,terkep)//5
         terkep[y][x][4] = 1;
         e.target.innerHTML='FV';
         nyersanyaglista[5] += 25;
@@ -555,7 +555,7 @@ function foglalte(x,y)
 {
     let terkep = aktualis_terkep();
     let a = 0;
-    if(map[y][x][4] > 0)
+    if(terkep[y][x][4] > 0)
     {
         a = terkep[y][x][4];
     }
@@ -748,7 +748,7 @@ function aktualis_terkep() {
     return ki_vagy_te == 'masik' ? terkep_masik : terkep_egyik;
 }
 function aktualis_claimlist() {
-    return ki_vagy_te == 'masik' ? terkep_masik : terkep_egyik;
+    return ki_vagy_te == 'masik' ? claimlista_masik : claimlista_egyik;
 }
 // végső generálás függvényei
 let egyik_palya = document.getElementById('egyik_palya');
@@ -803,7 +803,8 @@ window.onload = init;
 //divek_letrehozasa(24,24);
 //let map = randommapgen();
 //divek_szinezese(map);
-let claimlista = claimlist();
+let claimlista_egyik = claimlist();
+let claimlista_masik = claimlist();
 let nyersanyaglista = resourcelist();
 let banyaim = 0;
 let falvak = 0;
